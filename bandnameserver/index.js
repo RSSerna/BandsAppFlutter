@@ -7,18 +7,10 @@ const app = express();
 
 //Node Server
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+module.exports.io = require('socket.io')(server);
 
-//Mensajes por Sockets
-io.on('connection', client => {
-    console.log('Cliente Conectado');
-    client.on('disconnect', () => { console.log('Cliente desconectado'); });
-    client.on('mensaje', (payload) => {
-        console.log('Mensaje: ', payload);
-        io.emit('mensaje', { admin: 'Nuevo Mensaje' });
-    });
-});
-
+//Inicializar socket desde el archivo
+require('./sockets/socket');
 
 //Path Publico
 const publicPath = path.resolve(__dirname, 'public');
