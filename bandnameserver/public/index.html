@@ -21,6 +21,9 @@
         socket.on('mensaje', function (payload) {
             console.log('Mensaje desde HTML:', payload);
         });
+        socket.on('nuevo-mensaje', function (payload) {
+            console.log('Nuevo Mensaje desde html', payload);
+        });
 
         // Funcional con objetos para grandes archivos o objetos simples 
         socket.emit('mensaje', { nombre: 'Ricardo' });

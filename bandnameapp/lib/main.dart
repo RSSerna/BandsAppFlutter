@@ -1,3 +1,4 @@
+import 'package:bandnameapp/core/di/injection_container.dart';
 import 'package:bandnameapp/my_app.dart';
 import 'package:flutter/material.dart';
 
@@ -17,8 +18,7 @@ void main() async {
   //     AppEnvironment.setupEnv(Environment.develop);
   // }
 
-  // final injectionContainerImpl = InjectionContainerImpl();
-  // await injectionContainerImpl.init();
-  // runApp(AppState(injectionContainerImpl: injectionContainerImpl));
-  runApp(const AppState());
+  final injectionContainerImpl = InjectionContainerImpl();
+  await injectionContainerImpl.init();
+  runApp(AppState(injectionContainerImpl: injectionContainerImpl));
 }
