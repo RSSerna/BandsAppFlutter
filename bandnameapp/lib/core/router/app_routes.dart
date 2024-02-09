@@ -6,7 +6,7 @@ import 'package:bandnameapp/core/router/routes.dart';
 import 'package:bandnameapp/core/constants/router_paths.dart';
 
 final router = GoRouter(
-  initialLocation: RouterPaths.status,
+  initialLocation: RouterPaths.home,
   routes: [
     //SignIn
     GoRoute(

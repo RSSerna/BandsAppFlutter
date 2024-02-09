@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:bandnameapp/features/status/presentation/bloc/socket_service_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bandnameapp/features/bands/data/models/bands_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BandsScreen extends StatefulWidget {
   BandsScreen({super.key});
@@ -24,6 +26,32 @@ class _BandsScreenState extends State<BandsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Band Names'),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: BlocBuilder<SocketServiceBloc, SocketServiceBlocState>(
+              builder: (context, state) {
+                if (state is SocketConnectedState) {
+                  return const Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                  );
+                } else if (state is SocketDisconnectedState) {
+                  return const Icon(
+                    Icons.offline_bolt,
+                    color: Colors.red,
+                  );
+                }
+                else {
+                  return const Icon(
+                    Icons.reset_tv_rounded,
+                    color: Colors.yellow,
+                  );
+                }
+              },
+            ),
+          )
+        ],
       ),
       body: ListView.builder(
         itemCount: bands.length,
