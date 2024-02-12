@@ -1,0 +1,1 @@
+enum SocketEventEnum { receivedBands }

@@ -9,6 +9,14 @@ class SocketServiceTryConnectEvent extends SocketServiceBlocEvent {}
 
 class SocketServiceTryDisconnectEvent extends SocketServiceBlocEvent {}
 
+class SocketServiceReceivedDataEvent extends SocketServiceBlocEvent {
+  final SocketEventEnum socketEventEnum;
+  final dynamic payload;
+
+  SocketServiceReceivedDataEvent(
+      {required this.socketEventEnum, required this.payload});
+}
+
 class SocketServiceSetConnectionEvent extends SocketServiceBlocEvent {
   final bool isConnected;
 

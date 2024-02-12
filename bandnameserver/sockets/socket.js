@@ -9,7 +9,6 @@ bands.addBand(new Band('AC/DC'));
 bands.addBand(new Band('Metallica'));
 bands.addBand(new Band('Linkedin Park'));
 
-console.log(bands);
 
 //Mensajes por Sockets
 io.on('connection', client => {

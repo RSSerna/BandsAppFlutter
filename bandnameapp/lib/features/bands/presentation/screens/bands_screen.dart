@@ -1,11 +1,12 @@
 import 'dart:io';
-
-import 'package:bandnameapp/features/status/presentation/bloc/socket_service_bloc.dart';
+import 'package:bandnameapp/features/status/presentation/widgets/server_status_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:bandnameapp/features/bands/data/models/bands_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:bandnameapp/features/bands/presentation/screens/bloc/bands_bloc.dart';
+import 'package:bandnameapp/features/status/presentation/bloc/socket_service_bloc.dart';
+import 'package:bandnameapp/features/bands/data/models/bands_model.dart';
 
 class BandsScreen extends StatefulWidget {
   BandsScreen({super.key});
@@ -15,53 +16,45 @@ class BandsScreen extends StatefulWidget {
 }
 
 class _BandsScreenState extends State<BandsScreen> {
-  List<BandsModel> bands = const [
+  late List<BandsModel> bands = const [
     BandsModel(id: '1', name: 'Metallica', votes: 1),
     BandsModel(id: '2', name: 'Queen', votes: 4),
     BandsModel(id: '3', name: 'Linkin Park', votes: 2),
     BandsModel(id: '4', name: 'GunsNRoses', votes: 3),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Band Names'),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 10),
-            child: BlocBuilder<SocketServiceBloc, SocketServiceBlocState>(
-              builder: (context, state) {
-                if (state is SocketConnectedState) {
-                  return const Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                  );
-                } else if (state is SocketDisconnectedState) {
-                  return const Icon(
-                    Icons.offline_bolt,
-                    color: Colors.red,
-                  );
-                }
-                else {
-                  return const Icon(
-                    Icons.reset_tv_rounded,
-                    color: Colors.yellow,
-                  );
-                }
-              },
-            ),
-          )
+        actions: const [
+          ServerStatusWidget()
         ],
       ),
-      body: ListView.builder(
-        itemCount: bands.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _bandTile(bands[index]);
+      body: BlocListener<SocketServiceBloc, SocketServiceBlocState>(
+        listener: (context, state) {
+          if (state is SocketReceivedDataState) {
+            BlocProvider.of<BandsBloc>(context, listen: false).add(
+                BandsRetrieveEvent(
+                    payload: state.payload, eventEnum: state.socketEventEnum));
+          }
         },
+        child: BlocBuilder<BandsBloc, BandsState>(
+          builder: (context, state) {
+            bands = BlocProvider.of<BandsBloc>(context, listen: false).bands;
+            return ListView.builder(
+              itemCount: bands.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _bandTile(bands[index]);
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          addNewBand(context);
+          addNewBandWidget(context);
         },
         child: const Icon(Icons.add),
       ),
@@ -98,7 +91,7 @@ class _BandsScreenState extends State<BandsScreen> {
     );
   }
 
-  void addNewBand(BuildContext context) {
+  void addNewBandWidget(BuildContext context) {
     final textController = TextEditingController();
     if (Platform.isAndroid) {
       showDialog(
@@ -161,3 +154,4 @@ class _BandsScreenState extends State<BandsScreen> {
     Navigator.pop(context);
   }
 }
+

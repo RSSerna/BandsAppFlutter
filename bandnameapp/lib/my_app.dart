@@ -1,10 +1,12 @@
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:bandnameapp/core/router/app_routes.dart';
 import 'package:bandnameapp/core/di/injection_container.dart';
 import 'package:bandnameapp/features/status/presentation/bloc/socket_service_bloc.dart';
-import 'package:bandnameapp/core/router/app_routes.dart';
+import 'package:bandnameapp/features/bands/presentation/screens/bloc/bands_bloc.dart';
 
 class AppState extends StatelessWidget {
   final InjectionContainerImpl injectionContainerImpl;
@@ -22,7 +24,11 @@ class AppState extends StatelessWidget {
         BlocProvider<SocketServiceBloc>(
           create: (BuildContext context) =>
               injectionContainerImpl.sl<SocketServiceBloc>(),
-        )
+        ),
+        BlocProvider<BandsBloc>(
+          create: (BuildContext context) =>
+              injectionContainerImpl.sl<BandsBloc>(),
+        ),
       ],
       child: const MainApp(),
     );
