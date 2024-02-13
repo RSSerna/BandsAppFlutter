@@ -36,52 +36,16 @@ class SocketServiceBloc
     });
 
     on<SocketServiceSendEvent>((event, emit) {
-      service.sendData(event.event, event.data);
-      // _socket.emit(event.event, event.data);
+      SocketClientIO().sendData(event.event, event.data);
     });
   }
 
   void _initSocketConfig() {
-    SocketClientIO().socket.on('active-bands', (payload) {
-      print('Hi from BloC payload:');
-      print(payload);
-      add(SocketServiceReceivedDataEvent(
-          socketEventEnum: SocketEventEnum.receivedBands, payload: payload));
-    });
-
     SocketClientIO().socket.onConnect((payload) {
       add(SocketServiceSetConnectionEvent(isConnected: true));
     });
+    SocketClientIO().socket.onDisconnect((payload) {
+      add(SocketServiceSetConnectionEvent(isConnected: false));
+    });
   }
-
-  // void _initConfing() {
-  //   print('SocketServiceBloc Initialized');
-
-  //   final opts = io.OptionBuilder()
-  //       .setTransports(['websocket']) // for Flutter or Dart VM
-  //       .build();
-  //   print(opts);
-  //   _socket = io.io('http://10.0.2.2:3000/', opts);
-
-  //   print(_socket.connected);
-
-  //   _socket.onConnect((_) {
-  //     add(SocketServiceSetConnectionEvent(isConnected: true));
-  //     print('connect');
-  //   });
-
-  //   _socket.onDisconnect((_) {
-  //     add(SocketServiceSetConnectionEvent(isConnected: false));
-  //     print('disconnect');
-  //   });
-  //   _socket.on('nuevo-mensaje', (payload) {
-  //     print('NuevoMensaje $payload');
-  //   });
-
-  //   _socket.on('active-bands', (payload) {
-  //     add(SocketServiceReceivedDataEvent(
-  //         socketEventEnum: SocketEventEnum.receivedBands, payload: payload));
-  //     print('NuevoMensaje $payload');
-  //   });
-  // }
 }
