@@ -3,9 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:bandnameapp/features/status/presentation/widgets/server_status_widget.dart';
-import 'package:bandnameapp/features/bands/presentation/screens/bloc/bands_bloc.dart';
 import 'package:bandnameapp/features/bands/data/models/bands_model.dart';
+import 'package:bandnameapp/features/bands/presentation/screens/bloc/bands_bloc.dart';
+import 'package:bandnameapp/features/status/presentation/widgets/server_status_widget.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 class BandsScreen extends StatelessWidget {
 // class BandsScreen extends StatefulWidget {
@@ -28,11 +29,20 @@ class BandsScreen extends StatelessWidget {
           List<BandsModel> bands =
               BlocProvider.of<BandsBloc>(context, listen: false).bands;
           print('reloaded');
-          return ListView.builder(
-            itemCount: bands.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _bandTile(context, bands[index]);
-            },
+          return Column(
+            children: [
+              _pieGraphForBands(
+                allBands: bands,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: bands.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return _bandTile(context, bands[index]);
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -143,5 +153,32 @@ class BandsScreen extends StatelessWidget {
     }
     BlocProvider.of<BandsBloc>(context).add(BandAddEvent(bandName: bandName));
     Navigator.pop(context);
+  }
+}
+
+// ignore: camel_case_types, must_be_immutable
+class _pieGraphForBands extends StatelessWidget {
+  final List<BandsModel> allBands;
+  _pieGraphForBands({
+    required this.allBands,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Map<String, double> dataMap = {};
+    for (var band in allBands) {
+      dataMap.putIfAbsent(band.name, () => band.votes.toDouble());
+    }
+    return SizedBox(
+      width: double.infinity,
+      height: 200,
+      child: PieChart(
+        dataMap: dataMap,
+        chartType: ChartType.ring,
+        chartRadius: 150,
+        chartValuesOptions: const ChartValuesOptions(
+            showChartValuesInPercentage: true, decimalPlaces: 0),
+      ),
+    );
   }
 }
