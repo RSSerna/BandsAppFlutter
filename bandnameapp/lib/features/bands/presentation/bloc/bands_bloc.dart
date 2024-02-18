@@ -1,18 +1,31 @@
-import 'package:bandnameapp/core/sockets/socket_client_io.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:bandnameapp/core/sockets/socket.dart';
+import 'package:bandnameapp/core/sockets/socket_client_io.dart';
 import 'package:bandnameapp/core/enums/socket_enums.dart';
+import 'package:bandnameapp/features/bands/domain/usecases/add_band.dart';
+import 'package:bandnameapp/features/bands/domain/usecases/delete_band.dart';
+import 'package:bandnameapp/features/bands/domain/usecases/vote_band.dart';
 import 'package:bandnameapp/features/bands/data/models/bands_model.dart';
 
 part 'bands_event.dart';
 part 'bands_state.dart';
 
 class BandsBloc extends Bloc<BandsEvent, BandsState> {
-  // late StreamSubscription socketServiceStreamSubscription;
   List<BandsModel> bands = [];
+  final AddBand addBand;
+  final DeleteBand deleteBand;
+  final VoteBand voteBand;
+  final SocketService socketService;
 
-  BandsBloc() : super(BandsInitialState()) {
+  BandsBloc(
+      {required this.addBand,
+      required this.deleteBand,
+      required this.voteBand,
+      required this.socketService})
+      : super(BandsInitialState()) {
+    _setUpSocketForBandsBloc();
     on<BandSendVoteEvent>((event, emit) {
       SocketClientIO().sendData('vote-band', {'id': event.bandId});
       emit(BandsReloadState());
@@ -41,9 +54,14 @@ class BandsBloc extends Bloc<BandsEvent, BandsState> {
         emit(BandsReloadState());
       }
     });
-
-    SocketClientIO().socket.on('active-bands', (payload) {
-      print('Hi from BloC payload:');
+  }
+  void _setUpSocketForBandsBloc() {
+    SocketClientIO().service.on('active-bands', (payload) {
+      print(payload);
+      add(BandsRetrieveEvent(
+          eventEnum: SocketEventEnum.receivedBands, payload: payload));
+    });
+    socketService.service.on('active-bands', (payload) {
       print(payload);
       add(BandsRetrieveEvent(
           eventEnum: SocketEventEnum.receivedBands, payload: payload));

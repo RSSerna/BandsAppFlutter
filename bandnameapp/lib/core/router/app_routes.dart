@@ -11,11 +11,11 @@ final router = GoRouter(
     //SignIn
     GoRoute(
       path: RouterPaths.home,
-      builder: (BuildContext context, GoRouterState state) => BandsScreen(),
+      builder: (BuildContext context, GoRouterState state) => const BandsScreen(),
     ),
-    GoRoute(
-      path: RouterPaths.status,
-      builder: (BuildContext context, GoRouterState state) => StatusScreen(),
-    ),
+    // GoRoute(
+    //   path: RouterPaths.status,
+    //   builder: (BuildContext context, GoRouterState state) => const StatusScreen(),
+    // ),
   ],
 );

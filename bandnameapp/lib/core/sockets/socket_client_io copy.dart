@@ -2,24 +2,23 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:bandnameapp/core/errors/exceptions.dart';
 import 'package:bandnameapp/core/sockets/socket.dart';
 
-class SocketClientIO implements SocketService<Socket> {
-  static final SocketClientIO _instance = SocketClientIO._internal();
+class SocketClientIOCopy implements SocketService {
+  late Socket _socket;
 
-  SocketClientIO._internal() {
+  Socket get socket => _socket;
+
+  static final SocketClientIOCopy _instance = SocketClientIOCopy._internal();
+
+  SocketClientIOCopy._internal() {
     initConfing();
     print('<SocketClientIO> creation');
   }
 
-  factory SocketClientIO() => _instance;
-
-  late Socket _service;
-
-  @override
-  Socket get service => _service;
+  factory SocketClientIOCopy() => _instance;
 
   @override
   void initConfing() {
-    _service = io('http://10.0.2.2:3000/', {
+    _socket = io('http://10.0.2.2:3000/', {
       'transports': ['websocket'],
       'autoConnect': true
     });
@@ -27,24 +26,26 @@ class SocketClientIO implements SocketService<Socket> {
 
   @override
   void connect() {
-    _service.connect();
+    _socket.connect();
   }
 
   @override
   void disconnect() {
-    _service.disconnect();
+    _socket.disconnect();
   }
 
   @override
   bool sendData(String event, [dynamic data]) {
-    if (_service.disconnected) {
+    if (_socket.disconnected) {
       return false;
     }
     try {
-      _service.emit(event, data);
+      _socket.emit(event, data);
     } catch (e) {
       throw SocketException();
     }
     return true;
   }
+  @override
+  var service;
 }

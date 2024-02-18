@@ -1,22 +1,16 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:bandnameapp/features/bands/data/models/bands_model.dart';
-import 'package:bandnameapp/features/bands/presentation/screens/bloc/bands_bloc.dart';
-import 'package:bandnameapp/features/status/presentation/widgets/server_status_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pie_chart/pie_chart.dart';
 
+import 'package:bandnameapp/features/bands/presentation/bloc/bands_bloc.dart';
+import 'package:bandnameapp/features/bands/data/models/bands_model.dart';
+import 'package:bandnameapp/features/status/presentation/widgets/server_status_widget.dart';
+
 class BandsScreen extends StatelessWidget {
-// class BandsScreen extends StatefulWidget {
-//   BandsScreen({super.key});
-
-//   @override
-//   State<BandsScreen> createState() => _BandsScreenState();
-// }
-
-// class _BandsScreenState extends State<BandsScreen> {
+  const BandsScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,35 +60,33 @@ class BandsScreen extends StatelessWidget {
     );
   }
 
-  Widget _bandTile(BuildContext context, BandsModel band) {
-    return Dismissible(
-      key: Key(band.id),
-      direction: DismissDirection.startToEnd,
-      onDismissed: (direction) {
-        BlocProvider.of<BandsBloc>(context)
-            .add(BandDeleteEvent(bandId: band.id));
-      },
-      background: Container(
-          padding: const EdgeInsets.only(left: 8.0),
-          color: Colors.red,
-          child: const Align(
-            alignment: Alignment.centerLeft,
-            child: Text('Delete Band', style: TextStyle(color: Colors.white)),
-          )),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.blue[100],
-          child: Text(band.name.substring(0, 2)),
-        ),
-        title: Text(band.name),
-        trailing: Text('${band.votes}', style: const TextStyle(fontSize: 20)),
-        onTap: () {
+  Widget _bandTile(BuildContext context, BandsModel band) => Dismissible(
+        key: Key(band.id),
+        direction: DismissDirection.startToEnd,
+        onDismissed: (direction) {
           BlocProvider.of<BandsBloc>(context)
-              .add(BandSendVoteEvent(bandId: band.id));
+              .add(BandDeleteEvent(bandId: band.id));
         },
-      ),
-    );
-  }
+        background: Container(
+            padding: const EdgeInsets.only(left: 8.0),
+            color: Colors.red,
+            child: const Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Delete Band', style: TextStyle(color: Colors.white)),
+            )),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.blue[100],
+            child: Text(band.name.substring(0, 2)),
+          ),
+          title: Text(band.name),
+          trailing: Text('${band.votes}', style: const TextStyle(fontSize: 20)),
+          onTap: () {
+            BlocProvider.of<BandsBloc>(context)
+                .add(BandSendVoteEvent(bandId: band.id));
+          },
+        ),
+      );
 
   void addNewBandWidget(BuildContext context) {
     final textController = TextEditingController();
@@ -159,7 +151,7 @@ class BandsScreen extends StatelessWidget {
 // ignore: camel_case_types, must_be_immutable
 class _pieGraphForBands extends StatelessWidget {
   final List<BandsModel> allBands;
-  _pieGraphForBands({
+  const _pieGraphForBands({
     required this.allBands,
   });
 

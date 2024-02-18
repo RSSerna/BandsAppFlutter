@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:bandnameapp/core/router/app_routes.dart';
 import 'package:bandnameapp/core/di/injection_container.dart';
+import 'package:bandnameapp/features/bands/presentation/bloc/bands_bloc.dart';
 import 'package:bandnameapp/features/status/presentation/bloc/socket_service_bloc.dart';
-import 'package:bandnameapp/features/bands/presentation/screens/bloc/bands_bloc.dart';
 
 class AppState extends StatelessWidget {
   final InjectionContainerImpl injectionContainerImpl;
