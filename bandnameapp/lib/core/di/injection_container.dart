@@ -9,6 +9,7 @@ import 'package:bandnameapp/features/bands/domain/usecases/delete_band.dart';
 import 'package:bandnameapp/features/bands/domain/usecases/vote_band.dart';
 import 'package:bandnameapp/features/bands/presentation/bloc/bands_bloc.dart';
 import 'package:bandnameapp/features/status/presentation/bloc/socket_service_bloc.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 abstract class InjectionContainer {
   Future<void> init();
@@ -19,10 +20,11 @@ class InjectionContainerImpl implements InjectionContainer {
 
   @override
   Future<void> init() async {
+    //Socket Service
+    sl.registerSingleton<SocketService<Socket>>(SocketClientIO());
     ///Features
-
     ///Socket Service Bloc
-    sl.registerFactory(() => SocketServiceBloc(socketService: sl()));
+    sl.registerSingleton<SocketServiceBloc>(SocketServiceBloc(socketService: sl()));
     //Bands Bloc
     sl.registerFactory(() => BandsBloc(
         addBand: sl(), deleteBand: sl(), voteBand: sl(), socketService: sl()));
@@ -38,7 +40,5 @@ class InjectionContainerImpl implements InjectionContainer {
     sl.registerLazySingleton<BandsRemoteDataSource>(
       () => BandsRemoteDataSourceImpl(socketService: sl()),
     );
-    //Socket Service
-    sl.registerSingleton<SocketService>(SocketClientIO());
   }
 }

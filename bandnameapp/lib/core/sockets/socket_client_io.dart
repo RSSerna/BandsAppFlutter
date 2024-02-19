@@ -23,6 +23,8 @@ class SocketClientIO implements SocketService<Socket> {
       'transports': ['websocket'],
       'autoConnect': true
     });
+    _service.onDisconnect((data) => print('disconected'));
+    // _service.ondisconnect();
   }
 
   @override

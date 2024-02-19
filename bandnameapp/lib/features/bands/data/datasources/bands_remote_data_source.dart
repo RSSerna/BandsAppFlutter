@@ -1,3 +1,4 @@
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:bandnameapp/core/sockets/socket.dart';
 
 abstract class BandsRemoteDataSource {
@@ -7,7 +8,7 @@ abstract class BandsRemoteDataSource {
 }
 
 class BandsRemoteDataSourceImpl extends BandsRemoteDataSource {
-  final SocketService socketService;
+  final SocketService<Socket> socketService;
 
   BandsRemoteDataSourceImpl({required this.socketService});
 

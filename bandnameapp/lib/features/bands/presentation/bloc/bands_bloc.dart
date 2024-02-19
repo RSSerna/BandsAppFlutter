@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import 'package:bandnameapp/core/sockets/socket.dart';
 import 'package:bandnameapp/core/sockets/socket_client_io.dart';
@@ -17,7 +18,7 @@ class BandsBloc extends Bloc<BandsEvent, BandsState> {
   final AddBand addBand;
   final DeleteBand deleteBand;
   final VoteBand voteBand;
-  final SocketService socketService;
+  final SocketService<Socket> socketService;
 
   BandsBloc(
       {required this.addBand,
@@ -46,7 +47,7 @@ class BandsBloc extends Bloc<BandsEvent, BandsState> {
         //   newBands.add(BandsModel.fromMap(band));
         // }
         // bands = newBands;
-        bands = (event.payload as List)
+        bands = (event.payload)
             .map(
               (band) => BandsModel.fromMap(band),
             )
