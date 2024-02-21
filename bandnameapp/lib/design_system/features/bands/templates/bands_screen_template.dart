@@ -9,8 +9,8 @@ class BandsScreenTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWithSocketStatusMolecule.getAppBarWithSocketStatusMolecule(
-          const Text('Local: Bands App')),
+      appBar:
+          AppBarWithSocketStatusMolecule(title: const Text('Local: Bands App')),
       body: const BandsInformationOrganism(),
       floatingActionButton: const FloatingActionButtonBandMolecule(),
     );
