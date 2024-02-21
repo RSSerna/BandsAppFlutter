@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:bandnameapp/features/bands/data/models/bands_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BandsPieGraphAtom extends StatelessWidget {
   final List<BandsModel> allBands;
@@ -17,7 +18,7 @@ class BandsPieGraphAtom extends StatelessWidget {
         dataMap.putIfAbsent(band.name, () => band.votes.toDouble());
       }
     } else {
-      dataMap = {'no-connection': 0};
+      dataMap = {AppLocalizations.of(context)!.noConnection: 0};
     }
     return SizedBox(
       width: double.infinity,

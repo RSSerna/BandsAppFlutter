@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AlertDialogAndroidAtom extends StatelessWidget {
   final TextEditingController textController;
   final void Function() onPressed;
@@ -20,7 +20,7 @@ class AlertDialogAndroidAtom extends StatelessWidget {
       actions: [
         MaterialButton(
           onPressed: onPressed,
-          child: const Text('Local: Add'),
+          child: Text(AppLocalizations.of(context)!.add),
         )
       ],
     );

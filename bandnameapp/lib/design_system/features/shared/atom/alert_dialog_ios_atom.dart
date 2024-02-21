@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class AlertDialogIOsAtom extends StatelessWidget {
   final TextEditingController textController;
   final void Function() onPressed;
@@ -22,11 +24,11 @@ class AlertDialogIOsAtom extends StatelessWidget {
         CupertinoDialogAction(
           isDefaultAction: true,
           onPressed: onPressed,
-          child: const Text('Local: Add'),
+          child: Text(AppLocalizations.of(context)!.add),
         ),
         CupertinoDialogAction(
           isDestructiveAction: true,
-          child: const Text('Local: Cancel'),
+          child: Text(AppLocalizations.of(context)!.cancel),
           onPressed: () => Navigator.pop(context),
         )
       ],

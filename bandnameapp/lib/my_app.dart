@@ -7,6 +7,7 @@ import 'package:bandnameapp/core/router/app_routes.dart';
 import 'package:bandnameapp/core/di/injection_container.dart';
 import 'package:bandnameapp/features/bands/presentation/bloc/bands_bloc.dart';
 import 'package:bandnameapp/features/status/presentation/bloc/socket_service_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppState extends StatelessWidget {
   final InjectionContainerImpl injectionContainerImpl;
@@ -41,6 +42,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       title: 'Material App',
       routerConfig: router,
