@@ -1,3 +1,5 @@
+import 'package:bandnameapp/core/functionalSocket/functional_socket.dart';
+import 'package:bandnameapp/core/functionalSocket/functional_socket_io_client_impl.dart';
 import 'package:get_it/get_it.dart';
 import 'package:bandnameapp/core/sockets/socket.dart';
 import 'package:bandnameapp/core/sockets/socket_client_io.dart';
@@ -22,12 +24,21 @@ class InjectionContainerImpl implements InjectionContainer {
   Future<void> init() async {
     //Socket Service
     sl.registerSingleton<SocketService<Socket>>(SocketClientIO());
+    //Functional Socket
+    sl.registerSingleton<FunctionalSocket>(FunctionalSocketIOClientImpl());
+
     ///Features
     ///Socket Service Bloc
-    sl.registerSingleton<SocketServiceBloc>(SocketServiceBloc(socketService: sl()));
+    sl.registerSingleton<SocketServiceBloc>(
+        SocketServiceBloc(socketService: sl(), functionalSocket: sl()));
     //Bands Bloc
     sl.registerFactory(() => BandsBloc(
-        addBand: sl(), deleteBand: sl(), voteBand: sl(), socketService: sl()));
+          addBand: sl(),
+          deleteBand: sl(),
+          voteBand: sl(),
+          socketService: sl(),
+          functionalSocket: sl(),
+        ));
     //Usecase
     sl.registerLazySingleton(() => AddBand(repository: sl()));
     sl.registerLazySingleton(() => DeleteBand(repository: sl()));
